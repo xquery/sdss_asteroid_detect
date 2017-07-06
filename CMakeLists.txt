@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.2.2)
 project(asteroid_detect)
 
 set (ML_UTIL_VERSION_MAJOR 0)
