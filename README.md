@@ -6,7 +6,7 @@ Small collection of utilities for processing sdss images.
 
 ## Usage
 
-naive_detect <image-file-name>
+> naive_detect image-file-name
 
 ## Build and deploy
 
