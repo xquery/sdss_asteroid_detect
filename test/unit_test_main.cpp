@@ -1,4 +1,4 @@
-#include "unit_test_detect.cpp"
+#include "unit_test_naive_detect.cpp"
 
 #include <gtest/gtest.h>
 
