@@ -1,11 +1,5 @@
 language: cpp
 
-addons:
-  apt:
-    packages:
-    - cmake
-    - time
-
 compiler:
   - clang
 
