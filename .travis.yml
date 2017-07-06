@@ -5,6 +5,7 @@ compiler:
 
 sudo: required
 dist: trusty
+group: edge
 
 before_install:
   - echo $LANG
