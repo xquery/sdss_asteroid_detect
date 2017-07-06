@@ -9,7 +9,6 @@ using namespace std;
 
 int check_file_exists(string file){
     ifstream image_file(file);
-    LOG_S(INFO) << image_file.good();
     if (image_file.good()){
         return 0;
     }else{
