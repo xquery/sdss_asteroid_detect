@@ -65,7 +65,7 @@ add_test( runTests build/runAllTests )
 set(NAIVE_DETECT_SOURCE_FILES src/naive_detect/main.cpp)
 add_executable(naive_detect ${NAIVE_DETECT_SOURCE_FILES})
 
-target_link_libraries(naive_detect ${OpenCV_LIBS})
+target_link_libraries(naive_detect ${OpenCV_LIBS} curl)
 
 # define what to include in release
 install(TARGETS ${INS_TARGETS}
