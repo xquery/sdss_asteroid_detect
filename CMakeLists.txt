@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.2.2)
-project(asteroid_detect)
+project(sdss_asteroid_detect)
 
 set (ML_UTIL_VERSION_MAJOR 0)
 set (ML_UTIL_VERSION_MINOR 1)
