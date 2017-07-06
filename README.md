@@ -7,7 +7,9 @@ Small collection of utilities for processing sdss images.
 
 ## Usage
 
-> naive_detect image-file-name
+```
+> naive_detect <image-file-name>
+```
 
 ## Build and deploy
 
@@ -15,7 +17,6 @@ To build you may have to install some additional deps:
 ```
 yum install epel-release
 yum install cmake3
-yum install curl-devel
 ```
 
 To build this set of utilities on linux, osx and windows platforms.
@@ -36,6 +37,7 @@ and to create a release package
 ### Dependencies
 This project uses the following libs:
 
+* [opencv](https://github.com/opencv/opencv): for image processing
 * [rapidjson](https://github.com/miloyip/rapidjson): for json munging
 * [loguru](https://github.com/emilk/loguru): for logging
 * [gnuplot-cpp](https://github.com/orbitcowboy/gnuplot-cpp): for speaking to gnuplot
