@@ -1,13 +1,12 @@
-# asteroid_detect
-[![Build Status](https://travis-ci.org/xquery/asteroid_detect.svg?branch=master)](https://travis-ci.org/xquery/asteroid_detect)
+# asteroid_detect (ALPHA - unstable and under development)
 
+[![Build Status](https://travis-ci.org/xquery/asteroid_detect.svg?branch=master)](https://travis-ci.org/xquery/asteroid_detect)
 
 Small collection of utilities for processing sdss images.
 
 ## Usage
 
-
-### Quick Start
+naive_detect <image-file-name>
 
 ## Build and deploy
 
