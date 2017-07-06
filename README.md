@@ -1,4 +1,5 @@
 # asteroid_detect
+[![Build Status](https://travis-ci.org/xquery/asteroid_detect.svg?branch=master)](https://travis-ci.org/xquery/asteroid_detect)
 
 
 Small collection of utilities for processing sdss images.
