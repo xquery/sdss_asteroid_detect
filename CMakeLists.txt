@@ -61,10 +61,11 @@ add_executable(runAllTests test/unit_test_main.cpp)
 target_link_libraries(runAllTests gtest gmock_main pthread ${OpenCV_LIBS})
 add_test( runTests build/runAllTests )
 
-set(DETECT_SOURCE_FILES src/detect/main.cpp)
-add_executable(detect ${DETECT_SOURCE_FILES})
+# build command line utilities
+set(NAIVE_DETECT_SOURCE_FILES src/naive_detect/main.cpp)
+add_executable(naive_detect ${NAIVE_DETECT_SOURCE_FILES})
 
-target_link_libraries(detect ${OpenCV_LIBS})
+target_link_libraries(naive_detect ${OpenCV_LIBS})
 
 # define what to include in release
 install(TARGETS ${INS_TARGETS}
@@ -72,16 +73,8 @@ install(TARGETS ${INS_TARGETS}
         LIBRARY DESTINATION lib COMPONENT libraries
         ARCHIVE DESTINATION lib COMPONENT libraries
         )
-#install(FILES ${CMAKE_SOURCE_DIR}/LICENSE DESTINATION . COMPONENT applications)
-#install(FILES ${CMAKE_SOURCE_DIR}/README.md DESTINATION . COMPONENT applications)
-#install(FILES ${CMAKE_SOURCE_DIR}/VERSION DESTINATION . COMPONENT applications)
-#install(FILES ${CMAKE_SOURCE_DIR}/etc/.ml-utils DESTINATION . COMPONENT applications)
-#install(FILES ${CMAKE_SOURCE_DIR}/etc/.ml-utils DESTINATION etc COMPONENT applications)
-#install(FILES ${CMAKE_SOURCE_DIR}/etc/basic.gnuplot DESTINATION etc COMPONENT applications)
-#install(FILES ${CMAKE_SOURCE_DIR}/etc/text.gnuplot DESTINATION etc COMPONENT applications)
 
-#install(TARGETS ml-config RUNTIME DESTINATION bin COMPONENT applications)
-install(TARGETS detect RUNTIME DESTINATION bin COMPONENT applications)
+install(TARGETS naive_detect RUNTIME DESTINATION bin COMPONENT applications)
 
 # cpack defs
 set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
