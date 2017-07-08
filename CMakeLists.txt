@@ -64,8 +64,11 @@ add_test( runTests build/runAllTests )
 # build command line utilities
 set(NAIVE_DETECT_SOURCE_FILES src/naive_detect/main.cpp)
 add_executable(naive_detect ${NAIVE_DETECT_SOURCE_FILES})
-
 target_link_libraries(naive_detect ${OpenCV_LIBS} curl)
+
+set(VIDEO_DETECT_SOURCE_FILES src/test.cpp)
+add_executable(video_test ${VIDEO_DETECT_SOURCE_FILES})
+target_link_libraries(video_test ${OpenCV_LIBS} curl)
 
 # define what to include in release
 install(TARGETS ${INS_TARGETS}

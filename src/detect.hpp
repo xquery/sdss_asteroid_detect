@@ -43,12 +43,12 @@ namespace ad {
     using namespace std;
 
     struct hough_circle_params {
-        double dp = 1.0;
-        double minDist = 5;
-        double param1=40;
-        double param2=10;
-        int minRadius=1;
-        int maxRadius=35;
+        double dp = 1;        // 1
+        double minDist = 10;     // 5
+        double param1=40;       // 40
+        double param2=11;       // 10
+        int minRadius=2;        // 1
+        int maxRadius=25;       // 35
     };
 
     int naive_detect(string imagefilename, SimpleBlobDetector::Params params, hough_circle_params cparams ){
@@ -117,7 +117,7 @@ namespace ad {
                 cparams.minRadius    // int maxRadius=0
         );
 
-        if(!circles.empty() ){
+        if(!circles.empty() && circles.size() < 25 ){
             LOG_S(INFO) << "hits:" << circles.size();
             imwrite(imagefilename + ".candidate.jpg", im_with_keypoints );
         }else{
@@ -136,9 +136,9 @@ namespace ad {
         params.filterByColor = false;
         params.filterByCircularity = false;
         params.filterByArea = true;
-        params.minArea = 1.0f;
-        params.maxArea = 20.0f;
-        params.minThreshold = .01;
+        params.minArea = 3.0f;
+        params.maxArea = 15.0f;
+        params.minThreshold = 5;
         //params.maxThreshold = 150;
 
         hough_circle_params cparams;
