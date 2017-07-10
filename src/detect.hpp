@@ -43,12 +43,12 @@ namespace ad {
     using namespace std;
 
     struct hough_circle_params {
-        double dp = 1;        // 1
+        double dp      = 1;      // 1
         double minDist = 10;     // 5
-        double param1=40;       // 40
-        double param2=11;       // 10
-        int minRadius=2;        // 1
-        int maxRadius=25;       // 35
+        double param1  = 40;     // 40
+        double param2  = 10;     // 10
+        int minRadius  = 0;      // 1
+        int maxRadius  = 0;     // 35
     };
 
     int naive_detect(string imagefilename, SimpleBlobDetector::Params params, hough_circle_params cparams ){
@@ -57,6 +57,8 @@ namespace ad {
 
         Mat src, empty_image;
         src = imread(imagefilename,CV_LOAD_IMAGE_ANYCOLOR | CV_LOAD_IMAGE_ANYDEPTH);
+
+        medianBlur(src, src, 5);
 
         if(src.empty()){
             return -1;
@@ -97,7 +99,16 @@ namespace ad {
         Ptr<SimpleBlobDetector> detector = SimpleBlobDetector::create(params);
         detector->detect( result, keypoints );
 
+        LOG_S(INFO) << "# blobs::" << keypoints.size();
+
+        for( size_t i = 0; i < keypoints.size(); i++ ) {
+
+            LOG_S(INFO) << "x:" << keypoints[i].pt.x;
+
+        }
+
         Mat im_with_keypoints;
+
         drawKeypoints( result, keypoints, im_with_keypoints, Scalar(0,0,255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
 
         Mat gray;
@@ -117,9 +128,23 @@ namespace ad {
                 cparams.minRadius    // int maxRadius=0
         );
 
+        for( size_t i = 0; i < circles.size(); i++ ) {
+            Vec3i c = circles[i];
+
+            if (c[2] < 20) {
+               circle(gray, Point(c[0], c[1]), c[2] + 10, Scalar(255, 0, 0), 3, CV_AA);
+                circle(gray, Point(c[0], c[1]), 2, Scalar(0, 255, 0), 3, CV_AA);
+            }
+
+        }
+
         if(!circles.empty() && circles.size() < 25 ){
             LOG_S(INFO) << "hits:" << circles.size();
-            imwrite(imagefilename + ".candidate.jpg", im_with_keypoints );
+            int TotalNumberOfPixels = gray.rows * gray.cols;
+            int ZeroPixels = TotalNumberOfPixels - countNonZero(gray);
+            LOG_S(INFO) << "pixels #:" << ZeroPixels;
+
+            imwrite(imagefilename + ".candidate.jpg", gray);
         }else{
             LOG_S(INFO) << "no hits";
         }
