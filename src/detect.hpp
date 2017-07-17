@@ -51,7 +51,7 @@ namespace ad {
         int maxRadius  = 0;     // 35
     };
 
-    int naive_detect(string imagefilename, SimpleBlobDetector::Params params, hough_circle_params cparams ){
+    int naive_detect(string imagefilename, hough_circle_params cparams ){
 
         check_file_exists(imagefilename);
 
@@ -89,35 +89,18 @@ namespace ad {
 
         Mat img1,img2,img3;
 
+        // convert each layer to gray
         cvtColor(result_blue,img1,CV_RGB2GRAY);
         cvtColor(result_red,img2,CV_RGB2GRAY);
         cvtColor(result_green,img3,CV_RGB2GRAY);
 
+        // subtract each image, if moving something should be 'left over'
         Mat result = img1-img2-img3;
 
-        vector<KeyPoint> keypoints;
-        Ptr<SimpleBlobDetector> detector = SimpleBlobDetector::create(params);
-        detector->detect( result, keypoints );
-
-        LOG_S(INFO) << "# blobs::" << keypoints.size();
-
-        for( size_t i = 0; i < keypoints.size(); i++ ) {
-
-            LOG_S(INFO) << "x:" << keypoints[i].pt.x;
-
-        }
-
-        Mat im_with_keypoints;
-
-        drawKeypoints( result, keypoints, im_with_keypoints, Scalar(0,0,255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
-
-        Mat gray;
-        cvtColor(im_with_keypoints, gray, CV_BGR2GRAY);
-
+        // detect using hough circles
         std::vector<Vec3f> circles;
-
         HoughCircles(
-                gray,                // InputArray image
+                result,                // InputArray image
                 circles,             // OutputArray circles
                 CV_HOUGH_GRADIENT,   // int method
                 cparams.dp,          // double dp
@@ -128,47 +111,30 @@ namespace ad {
                 cparams.minRadius    // int maxRadius=0
         );
 
+        // filter out false positives
         for( size_t i = 0; i < circles.size(); i++ ) {
             Vec3i c = circles[i];
-
             if (c[2] < 20) {
-               circle(gray, Point(c[0], c[1]), c[2] + 10, Scalar(255, 0, 0), 3, CV_AA);
-                circle(gray, Point(c[0], c[1]), 2, Scalar(0, 255, 0), 3, CV_AA);
-            }
-
+                circle(result, Point(c[0], c[1]), c[2] + 10, Scalar(255, 0, 0), 3, CV_AA);
+                circle(result, Point(c[0], c[1]), 2, Scalar(0, 255, 0), 3, CV_AA);}
         }
 
+        // if candidate write *.candidate.jpg
         if(!circles.empty() && circles.size() < 25 ){
             LOG_S(INFO) << "hits:" << circles.size();
-            int TotalNumberOfPixels = gray.rows * gray.cols;
-            int ZeroPixels = TotalNumberOfPixels - countNonZero(gray);
+            int TotalNumberOfPixels = result.rows * result.cols;
+            int ZeroPixels = TotalNumberOfPixels - countNonZero(result);
             LOG_S(INFO) << "pixels #:" << ZeroPixels;
 
-            imwrite(imagefilename + ".candidate.jpg", gray);
+            imwrite(imagefilename + ".candidate.jpg", result);
         }else{
             LOG_S(INFO) << "no hits";
         }
-
         return 0;
     }
 
     int naive_detect(string imagefilename ) {
-        SimpleBlobDetector::Params params;
-
-        //params.minDistBetweenBlobs = 1.0f;
-        params.filterByInertia = false;
-        params.filterByConvexity = false;
-        params.filterByColor = false;
-        params.filterByCircularity = false;
-        params.filterByArea = true;
-        params.minArea = 3.0f;
-        params.maxArea = 15.0f;
-        params.minThreshold = 5;
-        //params.maxThreshold = 150;
-
         hough_circle_params cparams;
-
-        naive_detect(imagefilename, params, cparams );
+        naive_detect(imagefilename, cparams );
     }
-
 }
