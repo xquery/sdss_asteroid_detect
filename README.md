@@ -58,7 +58,7 @@ I have not quite got to 'the at scale' part as I am still grokking lots of ancil
  
 ## Next steps
   
-* publish results to[sdss asteroid detect s3 bucket](https://s3.amazonaws.com/sdss.asteroid.detect/)  
+* publish results to [sdss asteroid detect s3 bucket](https://s3.amazonaws.com/sdss.asteroid.detect/)  
 * Layer in ML approaches for better false positive detection 
 * Genetic alg for identifying optimal artifact detection parameters
 * Reconcile and report to [Moving Object Catelog](https://www.researchgate.net/publication/238534010_The_Sloan_Digital_Sky_Survey_Moving_Object_Catalog)
