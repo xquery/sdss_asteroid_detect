@@ -54,16 +54,20 @@ namespace ad {
     int naive_detect(string imagefilename, hough_circle_params cparams ){
 
         check_file_exists(imagefilename);
-
         Mat src, empty_image;
+
+        // read in the image
         src = imread(imagefilename,CV_LOAD_IMAGE_ANYCOLOR | CV_LOAD_IMAGE_ANYDEPTH);
 
-        medianBlur(src, src, 5);
-
+        // check that we really got an image
         if(src.empty()){
             return -1;
         }
 
+        // a slight blur on the image helps
+        medianBlur(src, src, 5);
+
+        // split into RGB layers
         vector<Mat> spl;
         split(src,spl);
 
@@ -97,7 +101,7 @@ namespace ad {
         // subtract each image, if moving something should be 'left over'
         Mat result = img1-img2-img3;
 
-        // detect using hough circles
+        // detect moving objects using hough transform (https://en.wikipedia.org/wiki/Hough_transform)
         std::vector<Vec3f> circles;
         HoughCircles(
                 result,                // InputArray image
@@ -111,7 +115,7 @@ namespace ad {
                 cparams.minRadius    // int maxRadius=0
         );
 
-        // filter out false positives
+        // filter out obvious false positives eg. lots of circle detection usually means bad things happening
         for( size_t i = 0; i < circles.size(); i++ ) {
             Vec3i c = circles[i];
             if (c[2] < 20) {
@@ -119,13 +123,12 @@ namespace ad {
                 circle(result, Point(c[0], c[1]), 2, Scalar(0, 255, 0), 3, CV_AA);}
         }
 
-        // if candidate write *.candidate.jpg
+        // write *.candidate.jpg
         if(!circles.empty() && circles.size() < 25 ){
             LOG_S(INFO) << "hits:" << circles.size();
             int TotalNumberOfPixels = result.rows * result.cols;
             int ZeroPixels = TotalNumberOfPixels - countNonZero(result);
             LOG_S(INFO) << "pixels #:" << ZeroPixels;
-
             imwrite(imagefilename + ".candidate.jpg", result);
         }else{
             LOG_S(INFO) << "no hits";

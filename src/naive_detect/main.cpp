@@ -3,8 +3,7 @@
 using namespace ad;
 using namespace std;
 
-// initial simple approach using hough circles and opencv pre processing
-
+// simplified branch example using opencv pre processing and hough transform for detection
 int main(int argc, char** argv ){
     LOG_S(INFO) << "asteroid naive_detect | Copyright 2017 James Fuller jim.fuller@webcomposite.com | https://github.com/xquery/asteroid_detect";
     if ( argc != 2 )

@@ -58,7 +58,7 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 find_package( curl REQUIRED )
 include_directories( ${curl_INCLUDE_DIRS} )
 
-# setup testing
+# setup gtest testing
 enable_testing()
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 if(NOT DISABLE_TESTS)
@@ -75,7 +75,7 @@ set(NAIVE_DETECT_SOURCE_FILES src/naive_detect/main.cpp)
 add_executable(naive_detect ${NAIVE_DETECT_SOURCE_FILES})
 target_link_libraries(naive_detect ${OpenCV_LIBS} ${curl_LIBS})
 
-set(VIDEO_DETECT_SOURCE_FILES src/test.cpp)
+set(VIDEO_DETECT_SOURCE_FILES src/example_video_test.cpp)
 add_executable(video_test ${VIDEO_DETECT_SOURCE_FILES})
 target_link_libraries(video_test ${OpenCV_LIBS} ${curl_LIBS})
 
