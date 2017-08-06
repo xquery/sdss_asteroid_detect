@@ -119,7 +119,7 @@ namespace ad {
         for( size_t i = 0; i < circles.size(); i++ ) {
             Vec3i c = circles[i];
             if (c[2] < 20) {
-                circle(result, Point(c[0], c[1]), c[2] + 10, Scalar(255, 0, 0), 3, CV_AA);
+                circle(result, Point(c[0], c[1]), c[2] + 20, Scalar(255, 0, 0), 3, CV_AA);
                 circle(result, Point(c[0], c[1]), 2, Scalar(0, 255, 0), 3, CV_AA);}
         }
 
@@ -129,7 +129,10 @@ namespace ad {
             int TotalNumberOfPixels = result.rows * result.cols;
             int ZeroPixels = TotalNumberOfPixels - countNonZero(result);
             LOG_S(INFO) << "pixels #:" << ZeroPixels;
-            imwrite(imagefilename + ".candidate.jpg", result);
+
+            Mat result_RGB;
+            cvtColor(result, result_RGB, CV_GRAY2RGB);
+            imwrite(imagefilename + ".candidate.jpg", src+ result_RGB);
         }else{
             LOG_S(INFO) << "no hits";
         }
