@@ -35,7 +35,7 @@
 
 #include <opencv2/opencv.hpp>
 
-#include "utils.hpp"
+#include "helpers.hpp"
 
 namespace ad {
 
@@ -43,25 +43,31 @@ namespace ad {
     using namespace std;
 
     struct hough_circle_params {
-        double dp = 1.0;
-        double minDist = 5;
-        double param1=40;
-        double param2=10;
-        int minRadius=1;
-        int maxRadius=35;
+        double dp      = 1;      // 1
+        double minDist = 10;     // 5
+        double param1  = 40;     // 40
+        double param2  = 10;     // 10
+        int minRadius  = 0;      // 1
+        int maxRadius  = 0;     // 35
     };
 
-    int naive_detect(string imagefilename, SimpleBlobDetector::Params params, hough_circle_params cparams ){
+    int naive_detect(string imagefilename, hough_circle_params cparams ){
 
         check_file_exists(imagefilename);
+        Mat org,src, empty_image;
 
-        Mat src, empty_image;
-        src = imread(imagefilename,CV_LOAD_IMAGE_ANYCOLOR | CV_LOAD_IMAGE_ANYDEPTH);
+        // read in the image
+        org = imread(imagefilename,CV_LOAD_IMAGE_ANYCOLOR | CV_LOAD_IMAGE_ANYDEPTH);
 
-        if(src.empty()){
+        // check that we really got an image
+        if(org.empty()){
             return -1;
         }
 
+        // a slight blur on the image helps
+        medianBlur(org, src, 5);
+
+        // split into RGB layers
         vector<Mat> spl;
         split(src,spl);
 
@@ -87,26 +93,18 @@ namespace ad {
 
         Mat img1,img2,img3;
 
+        // convert each layer to gray
         cvtColor(result_blue,img1,CV_RGB2GRAY);
         cvtColor(result_red,img2,CV_RGB2GRAY);
         cvtColor(result_green,img3,CV_RGB2GRAY);
 
+        // subtract each image, if moving something should be 'left over'
         Mat result = img1-img2-img3;
 
-        vector<KeyPoint> keypoints;
-        Ptr<SimpleBlobDetector> detector = SimpleBlobDetector::create(params);
-        detector->detect( result, keypoints );
-
-        Mat im_with_keypoints;
-        drawKeypoints( result, keypoints, im_with_keypoints, Scalar(0,0,255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
-
-        Mat gray;
-        cvtColor(im_with_keypoints, gray, CV_BGR2GRAY);
-
+        // detect moving objects using hough transform (https://en.wikipedia.org/wiki/Hough_transform)
         std::vector<Vec3f> circles;
-
         HoughCircles(
-                gray,                // InputArray image
+                result,                // InputArray image
                 circles,             // OutputArray circles
                 CV_HOUGH_GRADIENT,   // int method
                 cparams.dp,          // double dp
@@ -117,33 +115,32 @@ namespace ad {
                 cparams.minRadius    // int maxRadius=0
         );
 
-        if(!circles.empty() ){
+        // filter out obvious false positives eg. lots of circle detection usually means bad things happening
+        for( size_t i = 0; i < circles.size(); i++ ) {
+            Vec3i c = circles[i];
+            if (c[2] < 20) {
+                circle(result, Point(c[0], c[1]), c[2] + 20, Scalar(255, 0, 0), 3, CV_AA);
+                circle(result, Point(c[0], c[1]), 2, Scalar(0, 255, 0), 3, CV_AA);}
+        }
+
+        // write *.candidate.jpg
+        if(!circles.empty() && circles.size() < 25 ){
             LOG_S(INFO) << "hits:" << circles.size();
-            imwrite(imagefilename + ".candidate.jpg", im_with_keypoints );
+            int TotalNumberOfPixels = result.rows * result.cols;
+            int ZeroPixels = TotalNumberOfPixels - countNonZero(result);
+            LOG_S(INFO) << "pixels #:" << ZeroPixels;
+
+            Mat result_RGB;
+            cvtColor(result, result_RGB, CV_GRAY2RGB);
+            imwrite(imagefilename + ".candidate.jpg", org+ result_RGB);
         }else{
             LOG_S(INFO) << "no hits";
         }
-
         return 0;
     }
 
     int naive_detect(string imagefilename ) {
-        SimpleBlobDetector::Params params;
-
-        //params.minDistBetweenBlobs = 1.0f;
-        params.filterByInertia = false;
-        params.filterByConvexity = false;
-        params.filterByColor = false;
-        params.filterByCircularity = false;
-        params.filterByArea = true;
-        params.minArea = 1.0f;
-        params.maxArea = 20.0f;
-        params.minThreshold = .01;
-        //params.maxThreshold = 150;
-
         hough_circle_params cparams;
-
-        naive_detect(imagefilename, params, cparams );
+        naive_detect(imagefilename, cparams );
     }
-
 }

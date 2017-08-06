@@ -3,13 +3,13 @@ language: cpp
 compiler:
   - clang
 
-sudo: required
-dist: trusty
-
 before_install:
   - echo $LANG
   - echo $LC_ALL
 
+before_script:
+  - sudo apt-get install libopencv-dev
+
 script:
   - cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles"
-  - cpack --config CPackConfig.cmake
+#  - cpack --config CPackConfig.cmake
