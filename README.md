@@ -18,11 +18,15 @@ on the jpeg.
 
 The moving object is identified by a circle in the following example image.
 
-![Example candidate image](data/test/positives/candidate_example2.jpg)
+![Example candidate image2](data/test/positives/candidate_example2.jpg)
 
 here is another example.
 
 ![Example candidate image](data/test/positives/candidate_example.jpg)
+
+here is a good example of detection at the limit of image resolution.
+
+![Example candidate image3](data/test/positives/candidate_example3.jpg)
 
 ## Overview
 
