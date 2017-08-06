@@ -1,5 +1,5 @@
 # sdss_asteroid_detect 
-[![Build Status](https://travis-ci.org/xquery/asteroid_detect.svg?branch=master)](https://travis-ci.org/xquery/asteroid_detect)
+[![Build Status](https://travis-ci.org/xquery/sdss_asteroid_detect.svg?branch=master)](https://travis-ci.org/xquery/asteroid_detect)
 
 IMPORTANT NOTE- this software is unstable and under development.
 
