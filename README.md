@@ -16,6 +16,12 @@ The simplest approach is to grab a jpg image from SDSS and run naive_detect:
 which will generate a candidate.jpg if it contains a potential moving object, marking its location
 on the jpeg.
 
+The moving object is identified by a circle in the following example image.
+
+![Example candidate image](data/test/positives/candidate_example2.jpg)
+
+here is another example.
+
 ![Example candidate image](data/test/positives/candidate_example.jpg)
 
 ## Overview
