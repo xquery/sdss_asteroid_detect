@@ -8,5 +8,5 @@ before_install:
   - echo $LC_ALL
 
 script:
-  - cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles"
+  - cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -DOpenCV_DIR=OpenCV-src
 #  - cpack --config CPackConfig.cmake
