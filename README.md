@@ -38,20 +38,17 @@ Because it is most familiar to me, I am currently working with jpeg imagas thoug
  
 False positives are an issue:
 
-* false positives
 * image flaring
-* poor image quality
+* detecting poor image quality
 * unknown (ex. picking up other kinds of artifacts/moving objects in SDSS image)
 
 I have not quite got to 'the at scale' part as I am still grokking lots of ancillary SDSS data.
  
 ## Next steps
- 
-Layer in ML approaches for better false positive detection 
-
-Genetic alg for identifying optimal artifact detection parameters
-
-Reconcile and report to [Moving Object Catelog](https://www.researchgate.net/publication/238534010_The_Sloan_Digital_Sky_Survey_Moving_Object_Catalog)
+  
+* Layer in ML approaches for better false positive detection 
+* Genetic alg for identifying optimal artifact detection parameters
+* Reconcile and report to [Moving Object Catelog](https://www.researchgate.net/publication/238534010_The_Sloan_Digital_Sky_Survey_Moving_Object_Catalog)
 
 
 ## Build and deploy
@@ -70,21 +67,22 @@ To build this set of utilities on linux, osx and windows platforms.
 
 Note that running cmake will pull down dependencies.
 
-then run make, make install.
+Then run make, make install.
 
-and to create a release package
+To create a release package
 ```
 >cpack3 --config CPackConfig.cmake
 ```
 
 ### Dependencies
-This project uses the following libs:
+This project depends on the following external libs:
 
 * [opencv](https://github.com/opencv/opencv): for image processing
 * [rapidjson](https://github.com/miloyip/rapidjson): for json munging
 * [loguru](https://github.com/emilk/loguru): for logging
 * [gnuplot-cpp](https://github.com/orbitcowboy/gnuplot-cpp): for speaking to gnuplot
 * [googletest](https://github.com/google/googletest): for testing
+* [curl](https://curl.haxx.se): for http 
 
 ## License
 
