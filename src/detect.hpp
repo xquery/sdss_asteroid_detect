@@ -54,18 +54,18 @@ namespace ad {
     int naive_detect(string imagefilename, hough_circle_params cparams ){
 
         check_file_exists(imagefilename);
-        Mat src, empty_image;
+        Mat org,src, empty_image;
 
         // read in the image
-        src = imread(imagefilename,CV_LOAD_IMAGE_ANYCOLOR | CV_LOAD_IMAGE_ANYDEPTH);
+        org = imread(imagefilename,CV_LOAD_IMAGE_ANYCOLOR | CV_LOAD_IMAGE_ANYDEPTH);
 
         // check that we really got an image
-        if(src.empty()){
+        if(org.empty()){
             return -1;
         }
 
         // a slight blur on the image helps
-        medianBlur(src, src, 5);
+        medianBlur(org, src, 5);
 
         // split into RGB layers
         vector<Mat> spl;
@@ -132,7 +132,7 @@ namespace ad {
 
             Mat result_RGB;
             cvtColor(result, result_RGB, CV_GRAY2RGB);
-            imwrite(imagefilename + ".candidate.jpg", src+ result_RGB);
+            imwrite(imagefilename + ".candidate.jpg", org+ result_RGB);
         }else{
             LOG_S(INFO) << "no hits";
         }
