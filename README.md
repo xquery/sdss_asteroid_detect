@@ -16,6 +16,8 @@ The simplest approach is to grab a jpg image from SDSS and run naive_detect:
 which will generate a candidate.jpg if it contains a potential moving object, marking its location
 on the jpeg.
 
+![Example candidate image](data/test/positives/candidate_example.jpg)
+
 ## Overview
 
 This effort is an attempt to detect moving objects (eg. asteroids) in SDSS images at scale.
