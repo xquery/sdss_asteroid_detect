@@ -5,13 +5,12 @@
 
 #include <loguru.hpp>
 
+#define OK 0;
+
 using namespace std;
 
 int check_file_exists(string file){
     ifstream image_file(file);
-    if (image_file.good()){
-        return 0;
-    }else{
-        return -1;
-    }
+    CHECK_S(image_file.good()) << "image file not found, loaded or corruptf.";
+    return OK;
 }

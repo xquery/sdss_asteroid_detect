@@ -116,8 +116,8 @@ namespace ad {
         );
 
         // filter out obvious false positives eg. lots of circle detection usually means bad things happening
-        for( size_t i = 0; i < circles.size(); i++ ) {
-            Vec3i c = circles[i];
+        for( vector<Vec3f>::iterator it = circles.begin(); it!=circles.end(); ++it)  {
+            Vec3i c = *it;
             if (c[2] < 20) {
                 circle(result, Point(c[0], c[1]), c[2] + 20, Scalar(255, 0, 0), 3, CV_AA);
                 circle(result, Point(c[0], c[1]), 2, Scalar(0, 255, 0), 3, CV_AA);}
@@ -133,10 +133,13 @@ namespace ad {
             Mat result_RGB;
             cvtColor(result, result_RGB, CV_GRAY2RGB);
             imwrite(imagefilename + ".candidate.jpg", org+ result_RGB);
+//            namedWindow( "Display window", WINDOW_AUTOSIZE );// Create a window for display.
+//            imshow( "Display window", org+ result_RGB );                   // Show our image inside it.
+//            waitKey(0);
         }else{
             LOG_S(INFO) << "no hits";
         }
-        return 0;
+        return EXIT_SUCCESS;
     }
 
     int naive_detect(string imagefilename ) {

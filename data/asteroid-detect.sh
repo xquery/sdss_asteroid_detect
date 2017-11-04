@@ -2,7 +2,7 @@
 
 search=${1}
 
-find images -name "*.jpg" | while read file; do
+find images -name "*308*.jpg" | while read file; do
 echo "processing $file"
 ../cmake-build-debug/naive_detect $file
 done
